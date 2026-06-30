@@ -131,8 +131,7 @@ pub fn parse_generation(architecture: Option<&str>, name: &str) -> Option<f64> {
             return Some(1.0);
         }
         // Qwen: qwen2, qwen3, qwen3_moe, qwen3_5, qwen3_5_moe, qwen3_next
-        if arch_lower.starts_with("qwen") {
-            let suffix = &arch_lower["qwen".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("qwen") {
             if suffix.starts_with("3_5") || suffix.starts_with("3.5") {
                 return Some(3.5);
             }
@@ -151,16 +150,14 @@ pub fn parse_generation(architecture: Option<&str>, name: &str) -> Option<f64> {
             return Some(1.0);
         }
         // Llama: llama, llama4
-        if arch_lower.starts_with("llama") {
-            let suffix = &arch_lower["llama".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("llama") {
             if suffix.starts_with('4') {
                 return Some(4.0);
             }
             // Architecture is just "llama" — fall through to name-based parsing
         }
         // Gemma: gemma, gemma2, gemma3, gemma4
-        if arch_lower.starts_with("gemma") {
-            let suffix = &arch_lower["gemma".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("gemma") {
             if suffix.starts_with('4') {
                 return Some(4.0);
             }
@@ -173,8 +170,7 @@ pub fn parse_generation(architecture: Option<&str>, name: &str) -> Option<f64> {
             return Some(1.0);
         }
         // Phi: phi, phi3, phimoe
-        if arch_lower.starts_with("phi") {
-            let suffix = &arch_lower["phi".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("phi") {
             if suffix.starts_with('4') {
                 return Some(4.0);
             }
@@ -191,24 +187,21 @@ pub fn parse_generation(architecture: Option<&str>, name: &str) -> Option<f64> {
             return Some(1.0);
         }
         // Cohere: cohere, cohere2
-        if arch_lower.starts_with("cohere") {
-            let suffix = &arch_lower["cohere".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("cohere") {
             if suffix.starts_with('2') {
                 return Some(2.0);
             }
             return Some(1.0);
         }
         // Falcon: falcon, falcon3
-        if arch_lower.starts_with("falcon") {
-            let suffix = &arch_lower["falcon".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("falcon") {
             if suffix.starts_with('3') {
                 return Some(3.0);
             }
             return Some(1.0);
         }
         // Granite: granite, granite4
-        if arch_lower.starts_with("granite") {
-            let suffix = &arch_lower["granite".len()..];
+        if let Some(suffix) = arch_lower.strip_prefix("granite") {
             if suffix.starts_with('4') {
                 return Some(4.0);
             }

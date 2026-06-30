@@ -1421,12 +1421,11 @@ fn quality_score(model: &LlmModel, quant: &str, use_case: UseCase) -> f64 {
                 0.0
             }
         }
-        UseCase::Multimodal => {
-            if name_lower.contains("vision") || model.use_case.to_lowercase().contains("vision") {
-                6.0
-            } else {
-                0.0
-            }
+        UseCase::Multimodal
+            if (name_lower.contains("vision")
+                || model.use_case.to_lowercase().contains("vision")) =>
+        {
+            6.0
         }
         _ => 0.0,
     };

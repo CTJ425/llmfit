@@ -9,7 +9,6 @@ use llmfit_core::providers::{
 use llmfit_core::quality;
 
 use std::collections::{HashMap, HashSet};
-use std::ops::Add;
 use std::sync::mpsc;
 use std::{cmp, thread};
 
@@ -2085,16 +2084,13 @@ impl App {
 
         // Try each preset and see if the GPU name matches
         for preset in llmfit_core::benchmarks::HardwarePreset::all() {
-            if let Some(hw_name) = preset.hardware_name {
-                if lower.contains(&hw_name.to_lowercase()) {
-                    if let Some(cached) =
-                        llmfit_core::benchmarks::cached_leaderboard_for_preset(preset.label)
-                    {
-                        if !cached.rows.is_empty() {
-                            return Some(cached);
-                        }
-                    }
-                }
+            if let Some(hw_name) = preset.hardware_name
+                && lower.contains(&hw_name.to_lowercase())
+                && let Some(cached) =
+                    llmfit_core::benchmarks::cached_leaderboard_for_preset(preset.label)
+                && !cached.rows.is_empty()
+            {
+                return Some(cached);
             }
         }
         None
@@ -3967,10 +3963,8 @@ impl App {
         self.live_bench_scroll = 0;
         self.bench_view_mode = BenchViewMode::Results;
 
-        if !self.bench_running && self.ollama_available {
-            if !self.load_bench_cache() {
-                self.start_bench();
-            }
+        if !self.bench_running && self.ollama_available && !self.load_bench_cache() {
+            self.start_bench();
         }
     }
 
@@ -4046,25 +4040,22 @@ impl App {
             return false;
         }
 
-        if let Some(results) = cache.get("results") {
-            if let Ok(r) =
+        if let Some(results) = cache.get("results")
+            && let Ok(r) =
                 serde_json::from_value::<Vec<quality::ModelQualityResult>>(results.clone())
-            {
-                self.bench_results = r;
-            }
+        {
+            self.bench_results = r;
         }
-        if let Some(routing) = cache.get("routing") {
-            if let Ok(r) =
+        if let Some(routing) = cache.get("routing")
+            && let Ok(r) =
                 serde_json::from_value::<Vec<quality::RoutingRecommendation>>(routing.clone())
-            {
-                self.bench_routing = r;
-            }
+        {
+            self.bench_routing = r;
         }
-        if let Some(ru) = cache.get("runner_ups") {
-            if let Ok(r) = serde_json::from_value::<Vec<quality::RoutingRecommendation>>(ru.clone())
-            {
-                self.bench_runner_ups = r;
-            }
+        if let Some(ru) = cache.get("runner_ups")
+            && let Ok(r) = serde_json::from_value::<Vec<quality::RoutingRecommendation>>(ru.clone())
+        {
+            self.bench_runner_ups = r;
         }
 
         // Rebuild model status from cached results

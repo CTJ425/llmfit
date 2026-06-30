@@ -2386,18 +2386,9 @@ fn display_routing_matrix_full(
     let total_tests: usize = results.iter().map(|r| r.roles.len()).sum();
 
     println!();
-    println!(
-        "{}",
-        "╔══════════════════════════════════════════════════════╗"
-    );
-    println!(
-        "{}",
-        "║                MODEL ROUTING MATRIX                  ║"
-    );
-    println!(
-        "{}",
-        "╚══════════════════════════════════════════════════════╝"
-    );
+    println!("╔══════════════════════════════════════════════════════╗");
+    println!("║                MODEL ROUTING MATRIX                  ║");
+    println!("╚══════════════════════════════════════════════════════╝");
     println!();
     println!(
         "Provider: {} • Models: {} • Roles: {} • Tests: {}",

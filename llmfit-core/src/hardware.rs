@@ -598,15 +598,15 @@ impl SystemSpecs {
         // Block format.
         for line in vram_text.lines() {
             let lower = line.to_lowercase();
-            if lower.contains("total") && !lower.contains("used") {
-                if let Some(val) = line
+            if lower.contains("total")
+                && !lower.contains("used")
+                && let Some(val) = line
                     .split_whitespace()
                     .filter_map(|w| w.parse::<u64>().ok())
                     .next_back()
-                    && val > 0
-                {
-                    out.push(val);
-                }
+                && val > 0
+            {
+                out.push(val);
             }
         }
         if !out.is_empty() {
@@ -1634,7 +1634,7 @@ impl SystemSpecs {
         #[cfg(target_os = "linux")]
         {
             let text = std::fs::read_to_string("/proc/cpuinfo").ok()?;
-            return Self::parse_cpu_name_from_cpuinfo(&text);
+            Self::parse_cpu_name_from_cpuinfo(&text)
         }
 
         #[cfg(not(target_os = "linux"))]
@@ -1678,7 +1678,7 @@ impl SystemSpecs {
                 return None;
             }
 
-            return Some(model.to_string());
+            Some(model.to_string())
         }
 
         #[cfg(not(target_os = "linux"))]
